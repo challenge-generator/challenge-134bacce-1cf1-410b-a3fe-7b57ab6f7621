@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: comments-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce_comments
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+        default_schema: comments
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    schemas: comments
+    baseline-on-migrate: true
+    validate-on-migrate: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+    include-exception: false
+
+app:
+  allowed-origins:
+    - "http://localhost:3000"
+    - "https://ecommerce.example.com"
+  storage:
+    max-content-length: 2000
+    max-title-length: 100
+    idempotency-key-prefix: "comment_"
+    forbidden-words:
+      - "inapropiado"
+      - "ofensivo"
+      - "spam"
+      - "violento"
